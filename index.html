@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pranav — Privileged Access Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0D16;
+    --bg-2:#0E1220;
+    --panel:#141A28;
+    --panel-2:#1A2130;
+    --line:rgba(255,255,255,0.075);
+    --line-gold:rgba(231,178,76,0.16);
+    --ink:#ECEAE1;
+    --muted:#8C93A3;
+    --muted-2:#5F6675;
+    --gold:#E7B24C;
+    --gold-dim:#B98A2E;
+    --teal:#56C7B0;
+    --red:#E06A5B;
+    --display:'Space Grotesk',sans-serif;
+    --body:'IBM Plex Sans',sans-serif;
+    --mono:'IBM Plex Mono',monospace;
+    --maxw:1080px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--gold);color:#0A0D16}
+
+  /* faint vault-shaft column guide */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      radial-gradient(900px 500px at 50% -10%, rgba(231,178,76,0.06), transparent 70%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    z-index:-2;
+  }
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(10,13,22,0.72);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw);margin:0 auto;padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+  }
+  .brand{font-family:var(--mono);font-size:13px;letter-spacing:0.02em;display:flex;align-items:center;gap:10px}
+  .brand .key{color:var(--gold)}
+  .status{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:var(--mono);font-size:11px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:0.08em;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(86,199,176,0.5);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(86,199,176,0.45)}70%{box-shadow:0 0 0 7px rgba(86,199,176,0)}100%{box-shadow:0 0 0 0 rgba(86,199,176,0)}}
+  .nav-links{display:flex;gap:26px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .nav-links a{transition:color .2s}
+  .nav-links a:hover,.nav-links a:focus-visible{color:var(--gold)}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  /* ---------- hero ---------- */
+  header.hero{
+    min-height:88vh;display:flex;align-items:center;
+    padding:80px 0 60px;position:relative;
+  }
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:44px;width:100%}
+
+  .console{
+    font-family:var(--mono);font-size:13.5px;line-height:1.9;
+    background:linear-gradient(180deg,var(--panel) 0%, var(--bg-2) 100%);
+    border:1px solid var(--line);
+    border-left:2px solid var(--gold-dim);
+    border-radius:6px;
+    padding:22px 24px;max-width:560px;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,0.7);
+  }
+  .console .c-line{display:block;color:var(--muted);white-space:nowrap;overflow:hidden}
+  .console .c-line .arw{color:var(--gold-dim);margin-right:10px}
+  .console .c-line b{color:var(--ink);font-weight:500}
+  .console .granted{color:var(--gold);font-weight:600;letter-spacing:0.06em}
+  .console .granted::before{content:"✔ ";color:var(--teal)}
+
+  .hero-copy .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:18px;
+  }
+  .hero-copy h1{
+    font-family:var(--display);font-weight:600;
+    font-size:clamp(38px,6.4vw,68px);line-height:1.02;letter-spacing:-0.02em;
+    margin-bottom:20px;
+  }
+  .hero-copy h1 .thin{color:var(--muted);font-weight:400}
+  .hero-copy .lede{font-size:clamp(16px,2.2vw,19px);color:#C7C9C2;max-width:600px;margin-bottom:30px}
+  .hero-copy .lede strong{color:var(--gold);font-weight:600}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px}
+  .btn{
+    font-family:var(--mono);font-size:13px;padding:13px 22px;border-radius:5px;
+    border:1px solid var(--line);color:var(--ink);transition:.2s;cursor:pointer;
+    display:inline-flex;align-items:center;gap:9px;
+  }
+  .btn.primary{background:var(--gold);color:#0A0D16;border-color:var(--gold);font-weight:600}
+  .btn.primary:hover,.btn.primary:focus-visible{background:#f2c266;transform:translateY(-2px)}
+  .btn.ghost:hover,.btn.ghost:focus-visible{border-color:var(--gold);color:var(--gold)}
+
+  @media(min-width:860px){
+    .hero-grid{grid-template-columns:1.05fr 0.95fr;align-items:center;gap:56px}
+  }
+
+  /* ---------- section scaffolding ---------- */
+  section{padding:86px 0;border-top:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:44px;flex-wrap:wrap}
+  .sec-tag{font-family:var(--mono);font-size:12px;color:var(--gold-dim);letter-spacing:0.1em;white-space:nowrap}
+  .sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,4vw,38px);letter-spacing:-0.015em}
+  .sec-head p{color:var(--muted);font-size:15px;max-width:520px;margin-left:auto}
+  @media(max-width:720px){.sec-head p{margin-left:0}}
+
+  /* ---------- vault grid ---------- */
+  .vault{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .cell{background:var(--panel);padding:26px 24px;transition:background .25s;position:relative}
+  .cell:hover{background:var(--panel-2)}
+  .cell .abbr{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:0.12em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .cell .abbr::before{content:"";width:6px;height:6px;border-radius:1px;background:var(--gold);transform:rotate(45deg);transition:transform .25s}
+  .cell:hover .abbr::before{transform:rotate(45deg) scale(1.5)}
+  .cell h3{font-family:var(--display);font-size:18px;font-weight:500;margin-bottom:9px}
+  .cell p{font-size:14px;color:var(--muted);line-height:1.62}
+
+  /* ---------- field notes ---------- */
+  .notes{display:grid;gap:18px}
+  .note{
+    display:grid;grid-template-columns:1fr;gap:6px;
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:26px 28px;transition:border-color .25s,transform .25s;
+  }
+  .note:hover{border-color:var(--line-gold);transform:translateX(4px)}
+  .note .n-meta{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+  .note .comp{font-family:var(--mono);font-size:10.5px;color:var(--gold);border:1px solid var(--line-gold);padding:3px 9px;border-radius:3px;letter-spacing:0.08em}
+  .note h3{font-family:var(--display);font-weight:500;font-size:20px}
+  .note .kv{font-size:14.5px;color:#C4C7C0;line-height:1.62}
+  .note .kv b{color:var(--muted-2);font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;display:inline-block;min-width:74px;color:var(--gold-dim)}
+  @media(min-width:760px){
+    .note{grid-template-columns:200px 1fr;gap:28px;align-items:start}
+    .note .n-head{grid-column:1}
+    .note .n-body{grid-column:2;display:grid;gap:9px}
+  }
+
+  /* ---------- dev backbone ---------- */
+  .dev{display:grid;gap:30px;grid-template-columns:1fr}
+  .dev p.intro{font-size:16.5px;color:#C7C9C2;max-width:640px}
+  .dev p.intro b{color:var(--gold)}
+  .chips{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-family:var(--mono);font-size:12.5px;color:var(--ink);background:var(--panel);border:1px solid var(--line);padding:8px 14px;border-radius:20px}
+  .chip .t{color:var(--gold-dim)}
+
+  /* ---------- credentials ---------- */
+  .creds{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .cred{background:var(--bg-2);padding:26px 24px}
+  .cred .big{font-family:var(--display);font-size:clamp(24px,3.4vw,32px);color:var(--gold);font-weight:600;line-height:1.1;margin-bottom:8px}
+  .cred .lbl{font-size:13.5px;color:var(--muted)}
+
+  /* ---------- contact ---------- */
+  .contact{text-align:center;padding:96px 0 70px}
+  .contact .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+  .contact h2{font-family:var(--display);font-weight:600;font-size:clamp(30px,5vw,50px);letter-spacing:-0.02em;margin-bottom:22px;line-height:1.05}
+  .contact .links{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:8px}
+
+  footer{border-top:1px solid var(--line);padding:26px 0}
+  .foot-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:11.5px;color:var(--muted-2)}
+
+  /* ---------- motion / reveal ---------- */
+  body.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  body.js .reveal.in{opacity:1;transform:none}
+
+  body.js .console .c-line{opacity:0;animation:typein .5s forwards}
+  body.js .console .c-line:nth-child(1){animation-delay:.15s}
+  body.js .console .c-line:nth-child(2){animation-delay:.75s}
+  body.js .console .c-line:nth-child(3){animation-delay:1.35s}
+  body.js .console .c-line:nth-child(4){animation-delay:1.95s}
+  body.js .hero-copy{opacity:0;animation:typein .8s forwards;animation-delay:2.4s}
+  @keyframes typein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    body.js .reveal,body.js .console .c-line,body.js .hero-copy{opacity:1;transform:none;animation:none}
+    .dot{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><span class="key">◈</span> pranav<span style="color:var(--muted-2)">@</span>vault</div>
+    <div class="nav-links">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#field">Field notes</a>
+      <a href="#engineering">Engineering</a>
+      <a href="#signals">Signals</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <span class="status"><span class="dot"></span> Open to PAM roles</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="console" aria-hidden="true">
+        <span class="c-line"><span class="arw">›</span>access request &nbsp;<b>pranav</b> → privileged session</span>
+        <span class="c-line"><span class="arw">›</span>authenticating &nbsp;<b>LDAPS + PKI</b> (2FA)…</span>
+        <span class="c-line"><span class="arw">›</span>policy check &nbsp;<b>Vault → PSM → target</b></span>
+        <span class="c-line granted">ACCESS GRANTED</span>
+      </div>
+      <div class="hero-copy">
+        <div class="eyebrow">Privileged Access Management · CyberArk</div>
+        <h1>I keep the<br>keys to the <span class="thin">keys.</span></h1>
+        <p class="lede">Engineer working across the CyberArk PAM stack — <strong>PVWA, PSM, and the Digital Vault</strong> — with a software developer's backbone in Java and Spring Boot. I stand up privileged access, harden how it authenticates, and chase down the sessions that misbehave.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#field">Read the field notes ↴</a>
+          <a class="btn ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="capabilities">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// inside the vault</span>
+      <h2>The components I run</h2>
+      <p>Hands-on across the core CyberArk PAM architecture, from the web layer users touch down to the encrypted core.</p>
+    </div>
+    <div class="vault">
+      <div class="cell reveal">
+        <div class="abbr">PVWA</div>
+        <h3>Password Vault Web Access</h3>
+        <p>The front door. Configured and operated the web layer where users request privileged credentials and launch monitored sessions.</p>
+      </div>
+      <div class="cell reveal">
+        <div class="abbr">PSM</div>
+        <h3>Privileged Session Manager</h3>
+        <p>Brokers and records privileged sessions so no admin ever handles a raw credential. Set up, operated, and debugged it under real fault conditions.</p>
+      </div>
+      <div class="cell reveal">
+        <div class="abbr">VAULT</div>
+        <h3>Digital Vault · PrivateArk</h3>
+        <p>The encrypted heart of the platform. Stood up and managed the vault where every secret lives under seal, sealed off from the network around it.</p>
+      </div>
+      <div class="cell reveal">
+        <div class="abbr">AUTH</div>
+        <h3>LDAPS + PKI two-factor</h3>
+        <p>Hardened directory integration end to end — CA-signed LDAP certificate over LDAPS, with PKI-based two-factor layered onto privileged logins.</p>
+      </div>
+      <div class="cell reveal">
+        <div class="abbr">CTRL</div>
+        <h3>Access control &amp; audit</h3>
+        <p>Built and reasoned about access policy, audit trails, and encryption of sensitive data — the controls that make privileged access accountable.</p>
+      </div>
+      <div class="cell reveal">
+        <div class="abbr">TLS</div>
+        <h3>Certificate &amp; TLS hygiene</h3>
+        <p>Replaced self-signed certificates with proper CA-signed chains so directory binding is trusted, warning-free, and audit-ready.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="field">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// field notes</span>
+      <h2>Things I actually fixed</h2>
+      <p>Short accounts of real work in the lab — the problem, what I did, and where it landed.</p>
+    </div>
+    <div class="notes">
+
+      <div class="note reveal">
+        <div class="n-head">
+          <div class="n-meta"><span class="comp">VAULT · LDAP</span></div>
+          <h3>Killing the self-signed cert</h3>
+        </div>
+        <div class="n-body">
+          <p class="kv"><b>Problem</b> Directory binding rode on a self-signed LDAP certificate — untrusted, and a red flag in any hardened deployment.</p>
+          <p class="kv"><b>Action</b> Generated the request, obtained a CA-signed certificate, and swapped it into the LDAPS configuration cleanly.</p>
+          <p class="kv"><b>Result</b> A trusted, warning-free directory connection the vault could authenticate against with confidence.</p>
+        </div>
+      </div>
+
+      <div class="note reveal">
+        <div class="n-head">
+          <div class="n-meta"><span class="comp">AUTH · 2FA</span></div>
+          <h3>Two factors, no compromise</h3>
+        </div>
+        <div class="n-body">
+          <p class="kv"><b>Problem</b> Privileged logins backed by a single factor are the softest target in the whole chain.</p>
+          <p class="kv"><b>Action</b> Layered PKI-based two-factor authentication on top of LDAPS so identity is proven by certificate <em>and</em> directory.</p>
+          <p class="kv"><b>Result</b> Stronger assurance on every privileged sign-in, with no extra friction on the legitimate path.</p>
+        </div>
+      </div>
+
+      <div class="note reveal">
+        <div class="n-head">
+          <div class="n-meta"><span class="comp">PSM · SESSIONS</span></div>
+          <h3>The session that wouldn't let go</h3>
+        </div>
+        <div class="n-body">
+          <p class="kv"><b>Problem</b> PSM sessions froze mid-connection and had to be terminated and reconnected — recurring after a set period, the kind of intermittent fault that hides from a quick look.</p>
+          <p class="kv"><b>Action</b> Traced the behaviour across the session path, isolating where it stalls rather than guessing — the slow, methodical part of the job.</p>
+          <p class="kv"><b>Result</b> An ongoing diagnosis that sharpened how I read PSM connection faults and where they originate.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="engineering">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// the other half</span>
+      <h2>A developer's backbone</h2>
+      <p>Security is where I specialise; engineering is where I come from. It shows in how I automate, integrate, and reason about systems.</p>
+    </div>
+    <div class="dev reveal">
+      <p class="intro">Day to day I write <b>Java</b> — Spring Boot services, event-driven microservices over <b>Kafka</b>, REST APIs backed by <b>Oracle SQL</b> — and I've built solutions around the same themes PAM lives on: access controls, audit trails, and encryption of sensitive data. When the work turns to data, I reach for Python, C++, and SQL.</p>
+      <div class="chips">
+        <span class="chip"><span class="t">lang·</span> Java</span>
+        <span class="chip"><span class="t">framework·</span> Spring Boot</span>
+        <span class="chip"><span class="t">stream·</span> Kafka</span>
+        <span class="chip"><span class="t">api·</span> REST</span>
+        <span class="chip"><span class="t">db·</span> Oracle SQL</span>
+        <span class="chip"><span class="t">cloud·</span> AWS</span>
+        <span class="chip"><span class="t">lang·</span> Python</span>
+        <span class="chip"><span class="t">lang·</span> C++</span>
+        <span class="chip"><span class="t">data·</span> Excel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="signals">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// signals</span>
+      <h2>Credentials &amp; proof</h2>
+    </div>
+    <div class="creds reveal">
+      <div class="cred">
+        <div class="big">OCA</div>
+        <div class="lbl">Oracle Certified Associate — Java</div>
+      </div>
+      <div class="cred">
+        <div class="big">AWS</div>
+        <div class="lbl">Cloud certification — in progress</div>
+      </div>
+      <div class="cred">
+        <div class="big">9.31</div>
+        <div class="lbl">CGPA · B.E. Information Technology, Ramdeobaba University</div>
+      </div>
+      <div class="cred">
+        <div class="big">550+</div>
+        <div class="lbl">Problems solved on LeetCode</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap reveal">
+    <div class="eyebrow">Access request open</div>
+    <h2>Let's talk privileged access.</h2>
+    <p style="color:var(--muted);max-width:520px;margin:0 auto 8px">Open to CyberArk / PAM and backend engineering roles. The quickest way to reach me is below.</p>
+    <div class="links">
+      <a class="btn primary" href="mailto:your.email@example.com">Email me</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/your-handle">LinkedIn</a>
+      <a class="btn ghost" href="https://github.com/your-handle">GitHub</a>
+      <a class="btn ghost" href="#" onclick="return false;">Download résumé</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <span>◈ pranav@vault · Privileged Access Management</span>
+    <span>Built as a static page · deploy anywhere</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.body.classList.add('js');
+    if(reduce) return;
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+  })();
+</script>
+</body>
+</html>
