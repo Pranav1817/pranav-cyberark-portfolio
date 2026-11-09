@@ -1,428 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pranav — Privileged Access Management</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pranav Kumbhalkar Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0A0D16;
-    --bg-2:#0E1220;
-    --panel:#141A28;
-    --panel-2:#1A2130;
-    --line:rgba(255,255,255,0.075);
-    --line-gold:rgba(231,178,76,0.16);
-    --ink:#ECEAE1;
-    --muted:#8C93A3;
-    --muted-2:#5F6675;
-    --gold:#E7B24C;
-    --gold-dim:#B98A2E;
-    --teal:#56C7B0;
-    --red:#E06A5B;
-    --display:'Space Grotesk',sans-serif;
-    --body:'IBM Plex Sans',sans-serif;
-    --mono:'IBM Plex Mono',monospace;
-    --maxw:1080px;
+/* Layout idea: a left-aligned record sheet. Mono field labels in a narrow left rail,
+   content on the right, like reading an account record in a vault. */
+:root {
+  --paper: #eef1f6;
+  --surface: #ffffff;
+  --ink: #131c2e;
+  --muted: #56617a;
+  --line: #cfd6e3;
+  --accent: #1f4fd8;
+  --accent-soft: #dfe7fb;
+  --signal: #b4610a;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1524;
+    --surface: #162033;
+    --ink: #e8edf7;
+    --muted: #9aa6bf;
+    --line: #2a364e;
+    --accent: #8fb0ff;
+    --accent-soft: #1d2c4d;
+    --signal: #f0a94a;
+    color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1524;
+  --surface: #162033;
+  --ink: #e8edf7;
+  --muted: #9aa6bf;
+  --line: #2a364e;
+  --accent: #8fb0ff;
+  --accent-soft: #1d2c4d;
+  --signal: #f0a94a;
+  color-scheme: dark;
+}
 
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:var(--body);
-    font-size:16px;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  a{color:inherit;text-decoration:none}
-  ::selection{background:var(--gold);color:#0A0D16}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.1; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
 
-  /* faint vault-shaft column guide */
-  body::before{
-    content:"";
-    position:fixed;inset:0;
-    background:
-      radial-gradient(900px 500px at 50% -10%, rgba(231,178,76,0.06), transparent 70%),
-      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
-    z-index:-2;
-  }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+/* Top bar */
+.top {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; padding-top: 12px; padding-bottom: 12px; }
+.mark { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 500; color: var(--ink); text-decoration: none; }
+.mark span { color: var(--signal); }
+.top nav { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.top nav a { font-size: 0.875rem; color: var(--muted); text-decoration: none; }
+.top nav a:hover { color: var(--accent); }
 
-  /* ---------- nav ---------- */
-  nav{
-    position:sticky;top:0;z-index:50;
-    backdrop-filter:blur(10px);
-    background:rgba(10,13,22,0.72);
-    border-bottom:1px solid var(--line);
-  }
-  .nav-inner{
-    max-width:var(--maxw);margin:0 auto;padding:14px 28px;
-    display:flex;align-items:center;justify-content:space-between;gap:20px;
-  }
-  .brand{font-family:var(--mono);font-size:13px;letter-spacing:0.02em;display:flex;align-items:center;gap:10px}
-  .brand .key{color:var(--gold)}
-  .status{
-    display:inline-flex;align-items:center;gap:7px;
-    font-family:var(--mono);font-size:11px;color:var(--muted);
-    text-transform:uppercase;letter-spacing:0.08em;
-  }
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(86,199,176,0.5);animation:pulse 2.4s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(86,199,176,0.45)}70%{box-shadow:0 0 0 7px rgba(86,199,176,0)}100%{box-shadow:0 0 0 0 rgba(86,199,176,0)}}
-  .nav-links{display:flex;gap:26px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
-  .nav-links a{transition:color .2s}
-  .nav-links a:hover,.nav-links a:focus-visible{color:var(--gold)}
-  @media(max-width:720px){.nav-links{display:none}}
+/* Hero */
+.hero { padding: 64px 0 56px; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--signal); letter-spacing: 0.04em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(2.5rem, 6vw, 4.25rem); font-weight: 700; letter-spacing: -0.02em; margin-top: 12px; }
+.hero .lede { font-size: 1.1875rem; color: var(--muted); max-width: 34em; margin-top: 20px; }
+.hero .lede strong { color: var(--ink); font-weight: 500; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn {
+  display: inline-block; padding: 10px 18px; border-radius: 6px;
+  font-weight: 500; font-size: 0.9375rem; text-decoration: none;
+  border: 1px solid var(--line); color: var(--ink); background: var(--surface);
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.btn.primary:hover { color: var(--paper); opacity: 0.9; }
 
-  /* ---------- hero ---------- */
-  header.hero{
-    min-height:88vh;display:flex;align-items:center;
-    padding:80px 0 60px;position:relative;
-  }
-  .hero-grid{display:grid;grid-template-columns:1fr;gap:44px;width:100%}
+.record {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  overflow: hidden;
+}
+.record header {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 10px 16px; border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);
+}
+.pill { font-family: var(--font-mono); font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.record dl { margin: 0; }
+.record .row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+.record .row:last-child { border-bottom: 0; }
+.record dt { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); padding-top: 3px; }
+.record dd { margin: 0; font-size: 0.9375rem; }
 
-  .console{
-    font-family:var(--mono);font-size:13.5px;line-height:1.9;
-    background:linear-gradient(180deg,var(--panel) 0%, var(--bg-2) 100%);
-    border:1px solid var(--line);
-    border-left:2px solid var(--gold-dim);
-    border-radius:6px;
-    padding:22px 24px;max-width:560px;
-    box-shadow:0 30px 60px -30px rgba(0,0,0,0.7);
-  }
-  .console .c-line{display:block;color:var(--muted);white-space:nowrap;overflow:hidden}
-  .console .c-line .arw{color:var(--gold-dim);margin-right:10px}
-  .console .c-line b{color:var(--ink);font-weight:500}
-  .console .granted{color:var(--gold);font-weight:600;letter-spacing:0.06em}
-  .console .granted::before{content:"✔ ";color:var(--teal)}
+/* Sections */
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+.sec { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 32px 48px; }
+.sec > .label { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); padding-top: 8px; }
+.sec h2 { font-size: clamp(1.625rem, 3.2vw, 2.125rem); font-weight: 700; letter-spacing: -0.01em; }
+.sec .intro { color: var(--muted); max-width: 40em; margin-top: 12px; }
 
-  .hero-copy .eyebrow{
-    font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--gold);margin-bottom:18px;
-  }
-  .hero-copy h1{
-    font-family:var(--display);font-weight:600;
-    font-size:clamp(38px,6.4vw,68px);line-height:1.02;letter-spacing:-0.02em;
-    margin-bottom:20px;
-  }
-  .hero-copy h1 .thin{color:var(--muted);font-weight:400}
-  .hero-copy .lede{font-size:clamp(16px,2.2vw,19px);color:#C7C9C2;max-width:600px;margin-bottom:30px}
-  .hero-copy .lede strong{color:var(--gold);font-weight:600}
-  .cta-row{display:flex;flex-wrap:wrap;gap:14px}
-  .btn{
-    font-family:var(--mono);font-size:13px;padding:13px 22px;border-radius:5px;
-    border:1px solid var(--line);color:var(--ink);transition:.2s;cursor:pointer;
-    display:inline-flex;align-items:center;gap:9px;
-  }
-  .btn.primary{background:var(--gold);color:#0A0D16;border-color:var(--gold);font-weight:600}
-  .btn.primary:hover,.btn.primary:focus-visible{background:#f2c266;transform:translateY(-2px)}
-  .btn.ghost:hover,.btn.ghost:focus-visible{border-color:var(--gold);color:var(--gold)}
+/* PAM component grid */
+.stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 28px; }
+.comp { background: var(--surface); padding: 20px; }
+.comp .tag { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; color: var(--accent); }
+.comp h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; margin-top: 4px; line-height: 1.35; }
+.comp ul { margin-top: 10px; display: grid; gap: 6px; }
+.comp li, .bullets li { position: relative; padding-left: 16px; font-size: 0.9375rem; color: var(--muted); }
+.comp li::before, .bullets li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 1px; background: var(--signal); }
 
-  @media(min-width:860px){
-    .hero-grid{grid-template-columns:1.05fr 0.95fr;align-items:center;gap:56px}
-  }
+/* Experience */
+.job-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 24px; align-items: baseline; margin-top: 28px; }
+.job-head h3 { font-size: 1.25rem; font-weight: 700; }
+.job-head .when { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tracks { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin-top: 20px; }
+.track h4 { margin: 0 0 10px; font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; color: var(--signal); text-transform: uppercase; letter-spacing: 0.04em; }
+.bullets { display: grid; gap: 8px; }
+.bullets strong { color: var(--ink); font-weight: 500; }
 
-  /* ---------- section scaffolding ---------- */
-  section{padding:86px 0;border-top:1px solid var(--line)}
-  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:44px;flex-wrap:wrap}
-  .sec-tag{font-family:var(--mono);font-size:12px;color:var(--gold-dim);letter-spacing:0.1em;white-space:nowrap}
-  .sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,4vw,38px);letter-spacing:-0.015em}
-  .sec-head p{color:var(--muted);font-size:15px;max-width:520px;margin-left:auto}
-  @media(max-width:720px){.sec-head p{margin-left:0}}
+/* Projects */
+.projects { display: grid; gap: 20px; margin-top: 28px; }
+.project { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+.project-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px; }
+.project h3 { font-size: 1.25rem; font-weight: 700; }
+.project .what { margin-top: 8px; max-width: 44em; }
+.project .bullets { margin-top: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.chips li { font-family: var(--font-mono); font-size: 0.75rem; padding: 3px 8px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); }
 
-  /* ---------- vault grid ---------- */
-  .vault{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-  .cell{background:var(--panel);padding:26px 24px;transition:background .25s;position:relative}
-  .cell:hover{background:var(--panel-2)}
-  .cell .abbr{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:0.12em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-  .cell .abbr::before{content:"";width:6px;height:6px;border-radius:1px;background:var(--gold);transform:rotate(45deg);transition:transform .25s}
-  .cell:hover .abbr::before{transform:rotate(45deg) scale(1.5)}
-  .cell h3{font-family:var(--display);font-size:18px;font-weight:500;margin-bottom:9px}
-  .cell p{font-size:14px;color:var(--muted);line-height:1.62}
+/* Skills */
+.skills { margin-top: 24px; border-top: 1px solid var(--line); }
+.skills .row { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 24px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.skills dt { font-weight: 500; font-size: 0.9375rem; }
+.skills dd { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+dl { margin: 0; }
 
-  /* ---------- field notes ---------- */
-  .notes{display:grid;gap:18px}
-  .note{
-    display:grid;grid-template-columns:1fr;gap:6px;
-    background:var(--panel);border:1px solid var(--line);border-radius:8px;
-    padding:26px 28px;transition:border-color .25s,transform .25s;
-  }
-  .note:hover{border-color:var(--line-gold);transform:translateX(4px)}
-  .note .n-meta{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
-  .note .comp{font-family:var(--mono);font-size:10.5px;color:var(--gold);border:1px solid var(--line-gold);padding:3px 9px;border-radius:3px;letter-spacing:0.08em}
-  .note h3{font-family:var(--display);font-weight:500;font-size:20px}
-  .note .kv{font-size:14.5px;color:#C4C7C0;line-height:1.62}
-  .note .kv b{color:var(--muted-2);font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;display:inline-block;min-width:74px;color:var(--gold-dim)}
-  @media(min-width:760px){
-    .note{grid-template-columns:200px 1fr;gap:28px;align-items:start}
-    .note .n-head{grid-column:1}
-    .note .n-body{grid-column:2;display:grid;gap:9px}
-  }
+/* Credentials */
+.creds { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; margin-top: 24px; }
+.creds h3 { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; color: var(--signal); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+.creds li { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 0.9375rem; }
+.creds li span { display: block; color: var(--muted); font-size: 0.875rem; }
+.num { font-variant-numeric: tabular-nums; }
 
-  /* ---------- dev backbone ---------- */
-  .dev{display:grid;gap:30px;grid-template-columns:1fr}
-  .dev p.intro{font-size:16.5px;color:#C7C9C2;max-width:640px}
-  .dev p.intro b{color:var(--gold)}
-  .chips{display:flex;flex-wrap:wrap;gap:10px}
-  .chip{font-family:var(--mono);font-size:12.5px;color:var(--ink);background:var(--panel);border:1px solid var(--line);padding:8px 14px;border-radius:20px}
-  .chip .t{color:var(--gold-dim)}
+/* Contact */
+.contact-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 24px; }
+.contact-list li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.contact-list .k { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 4px; }
+.contact-list a { overflow-wrap: anywhere; font-size: 0.9375rem; }
 
-  /* ---------- credentials ---------- */
-  .creds{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-  .cred{background:var(--bg-2);padding:26px 24px}
-  .cred .big{font-family:var(--display);font-size:clamp(24px,3.4vw,32px);color:var(--gold);font-weight:600;line-height:1.1;margin-bottom:8px}
-  .cred .lbl{font-size:13.5px;color:var(--muted)}
+footer { border-top: 1px solid var(--line); padding: 24px 0 40px; color: var(--muted); font-size: 0.8125rem; font-family: var(--font-mono); }
 
-  /* ---------- contact ---------- */
-  .contact{text-align:center;padding:96px 0 70px}
-  .contact .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
-  .contact h2{font-family:var(--display);font-weight:600;font-size:clamp(30px,5vw,50px);letter-spacing:-0.02em;margin-bottom:22px;line-height:1.05}
-  .contact .links{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:8px}
-
-  footer{border-top:1px solid var(--line);padding:26px 0}
-  .foot-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:11.5px;color:var(--muted-2)}
-
-  /* ---------- motion / reveal ---------- */
-  body.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
-  body.js .reveal.in{opacity:1;transform:none}
-
-  body.js .console .c-line{opacity:0;animation:typein .5s forwards}
-  body.js .console .c-line:nth-child(1){animation-delay:.15s}
-  body.js .console .c-line:nth-child(2){animation-delay:.75s}
-  body.js .console .c-line:nth-child(3){animation-delay:1.35s}
-  body.js .console .c-line:nth-child(4){animation-delay:1.95s}
-  body.js .hero-copy{opacity:0;animation:typein .8s forwards;animation-delay:2.4s}
-  @keyframes typein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-  @media(prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto}
-    body.js .reveal,body.js .console .c-line,body.js .hero-copy{opacity:1;transform:none;animation:none}
-    .dot{animation:none}
-  }
+@media (max-width: 800px) {
+  .hero { padding: 40px 0; }
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .sec { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .sec > .label { padding-top: 0; }
+  section { padding: 40px 0; }
+  .skills .row { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <div class="brand"><span class="key">◈</span> pranav<span style="color:var(--muted-2)">@</span>vault</div>
-    <div class="nav-links">
-      <a href="#capabilities">Capabilities</a>
-      <a href="#field">Field notes</a>
-      <a href="#engineering">Engineering</a>
-      <a href="#signals">Signals</a>
+<div class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">pranav<span>.</span>kumbhalkar</a>
+    <nav aria-label="Sections">
+      <a href="#pam">PAM stack</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
-    </div>
-    <span class="status"><span class="dot"></span> Open to PAM roles</span>
+    </nav>
   </div>
-</nav>
+</div>
 
-<header class="hero">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div class="console" aria-hidden="true">
-        <span class="c-line"><span class="arw">›</span>access request &nbsp;<b>pranav</b> → privileged session</span>
-        <span class="c-line"><span class="arw">›</span>authenticating &nbsp;<b>LDAPS + PKI</b> (2FA)…</span>
-        <span class="c-line"><span class="arw">›</span>policy check &nbsp;<b>Vault → PSM → target</b></span>
-        <span class="c-line granted">ACCESS GRANTED</span>
-      </div>
-      <div class="hero-copy">
-        <div class="eyebrow">Privileged Access Management · CyberArk</div>
-        <h1>I keep the<br>keys to the <span class="thin">keys.</span></h1>
-        <p class="lede">Engineer working across the CyberArk PAM stack — <strong>PVWA, PSM, and the Digital Vault</strong> — with a software developer's backbone in Java and Spring Boot. I stand up privileged access, harden how it authenticates, and chase down the sessions that misbehave.</p>
-        <div class="cta-row">
-          <a class="btn primary" href="#field">Read the field notes ↴</a>
-          <a class="btn ghost" href="#contact">Get in touch</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
-
-<section id="capabilities">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="sec-tag">// inside the vault</span>
-      <h2>The components I run</h2>
-      <p>Hands-on across the core CyberArk PAM architecture, from the web layer users touch down to the encrypted core.</p>
-    </div>
-    <div class="vault">
-      <div class="cell reveal">
-        <div class="abbr">PVWA</div>
-        <h3>Password Vault Web Access</h3>
-        <p>The front door. Configured and operated the web layer where users request privileged credentials and launch monitored sessions.</p>
-      </div>
-      <div class="cell reveal">
-        <div class="abbr">PSM</div>
-        <h3>Privileged Session Manager</h3>
-        <p>Brokers and records privileged sessions so no admin ever handles a raw credential. Set up, operated, and debugged it under real fault conditions.</p>
-      </div>
-      <div class="cell reveal">
-        <div class="abbr">VAULT</div>
-        <h3>Digital Vault · PrivateArk</h3>
-        <p>The encrypted heart of the platform. Stood up and managed the vault where every secret lives under seal, sealed off from the network around it.</p>
-      </div>
-      <div class="cell reveal">
-        <div class="abbr">AUTH</div>
-        <h3>LDAPS + PKI two-factor</h3>
-        <p>Hardened directory integration end to end — CA-signed LDAP certificate over LDAPS, with PKI-based two-factor layered onto privileged logins.</p>
-      </div>
-      <div class="cell reveal">
-        <div class="abbr">CTRL</div>
-        <h3>Access control &amp; audit</h3>
-        <p>Built and reasoned about access policy, audit trails, and encryption of sensitive data — the controls that make privileged access accountable.</p>
-      </div>
-      <div class="cell reveal">
-        <div class="abbr">TLS</div>
-        <h3>Certificate &amp; TLS hygiene</h3>
-        <p>Replaced self-signed certificates with proper CA-signed chains so directory binding is trusted, warning-free, and audit-ready.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="field">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="sec-tag">// field notes</span>
-      <h2>Things I actually fixed</h2>
-      <p>Short accounts of real work in the lab — the problem, what I did, and where it landed.</p>
-    </div>
-    <div class="notes">
-
-      <div class="note reveal">
-        <div class="n-head">
-          <div class="n-meta"><span class="comp">VAULT · LDAP</span></div>
-          <h3>Killing the self-signed cert</h3>
-        </div>
-        <div class="n-body">
-          <p class="kv"><b>Problem</b> Directory binding rode on a self-signed LDAP certificate — untrusted, and a red flag in any hardened deployment.</p>
-          <p class="kv"><b>Action</b> Generated the request, obtained a CA-signed certificate, and swapped it into the LDAPS configuration cleanly.</p>
-          <p class="kv"><b>Result</b> A trusted, warning-free directory connection the vault could authenticate against with confidence.</p>
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">CyberArk PAM Engineer</p>
+        <h1>Pranav Kumbhalkar</h1>
+        <p class="lede">I keep privileged access working and accountable. At Accenture I run <strong>L2 support for CyberArk PAM</strong>: patching PVWA and PSM, fixing CPM rotation failures, and renewing certificates before they expire. I also write the <strong>Java and Spring Boot</strong> services that sit around it.</p>
+        <div class="actions">
+          <a class="btn primary" href="#contact">Get in touch</a>
+          <a class="btn" href="https://github.com/Pranav1817">GitHub</a>
+          <a class="btn" href="https://linkedin.com/in/pranav-kumbhalkar-aa771922b">LinkedIn</a>
         </div>
       </div>
 
-      <div class="note reveal">
-        <div class="n-head">
-          <div class="n-meta"><span class="comp">AUTH · 2FA</span></div>
-          <h3>Two factors, no compromise</h3>
-        </div>
-        <div class="n-body">
-          <p class="kv"><b>Problem</b> Privileged logins backed by a single factor are the softest target in the whole chain.</p>
-          <p class="kv"><b>Action</b> Layered PKI-based two-factor authentication on top of LDAPS so identity is proven by certificate <em>and</em> directory.</p>
-          <p class="kv"><b>Result</b> Stronger assurance on every privileged sign-in, with no extra friction on the legitimate path.</p>
-        </div>
-      </div>
-
-      <div class="note reveal">
-        <div class="n-head">
-          <div class="n-meta"><span class="comp">PSM · SESSIONS</span></div>
-          <h3>The session that wouldn't let go</h3>
-        </div>
-        <div class="n-body">
-          <p class="kv"><b>Problem</b> PSM sessions froze mid-connection and had to be terminated and reconnected — recurring after a set period, the kind of intermittent fault that hides from a quick look.</p>
-          <p class="kv"><b>Action</b> Traced the behaviour across the session path, isolating where it stalls rather than guessing — the slow, methodical part of the job.</p>
-          <p class="kv"><b>Result</b> An ongoing diagnosis that sharpened how I read PSM connection faults and where they originate.</p>
-        </div>
-      </div>
-
+      <aside class="record" aria-label="Profile summary">
+        <header><span>Account details</span><span class="pill">CyberArk certified</span></header>
+        <dl>
+          <div class="row"><dt>Role</dt><dd>CyberArk PAM engineer, L2 support</dd></div>
+          <div class="row"><dt>Employer</dt><dd>Accenture, Nagpur, India</dd></div>
+          <div class="row"><dt>Since</dt><dd class="num">March 2024</dd></div>
+          <div class="row"><dt>Certified</dt><dd>CyberArk Defender, CyberArk Sentry, Oracle Certified Java Associate</dd></div>
+          <div class="row"><dt>Also builds</dt><dd>Java, Spring Boot, Kafka, AWS</dd></div>
+          <div class="row"><dt>Degree</dt><dd>B.E. Information Technology, <span class="num">9.31</span> CGPA</dd></div>
+        </dl>
+      </aside>
     </div>
   </div>
-</section>
 
-<section id="engineering">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="sec-tag">// the other half</span>
-      <h2>A developer's backbone</h2>
-      <p>Security is where I specialise; engineering is where I come from. It shows in how I automate, integrate, and reason about systems.</p>
-    </div>
-    <div class="dev reveal">
-      <p class="intro">Day to day I write <b>Java</b> — Spring Boot services, event-driven microservices over <b>Kafka</b>, REST APIs backed by <b>Oracle SQL</b> — and I've built solutions around the same themes PAM lives on: access controls, audit trails, and encryption of sensitive data. When the work turns to data, I reach for Python, C++, and SQL.</p>
-      <div class="chips">
-        <span class="chip"><span class="t">lang·</span> Java</span>
-        <span class="chip"><span class="t">framework·</span> Spring Boot</span>
-        <span class="chip"><span class="t">stream·</span> Kafka</span>
-        <span class="chip"><span class="t">api·</span> REST</span>
-        <span class="chip"><span class="t">db·</span> Oracle SQL</span>
-        <span class="chip"><span class="t">cloud·</span> AWS</span>
-        <span class="chip"><span class="t">lang·</span> Python</span>
-        <span class="chip"><span class="t">lang·</span> C++</span>
-        <span class="chip"><span class="t">data·</span> Excel</span>
+  <section id="pam">
+    <div class="wrap sec">
+      <p class="label">01 / PAM stack</p>
+      <div>
+        <h2>What I do on each CyberArk component</h2>
+        <p class="intro">Production work for enterprise clients, plus a home lab where I rebuild the same setups from scratch to understand why they break.</p>
+        <div class="stack">
+          <div class="comp">
+            <span class="tag">Vault</span>
+            <h3>Digital Vault and DR</h3>
+            <ul>
+              <li>Review ITA logs to trace Vault-side issues</li>
+              <li>Log in to the DR server to verify data replication</li>
+              <li>Run PrivateArk administration in the lab</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">PVWA</span>
+            <h3>Password Vault Web Access</h3>
+            <ul>
+              <li>Patch PVWA servers</li>
+              <li>Renew PVWA certificates</li>
+              <li>Guide users through login and account access</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">CPM</span>
+            <h3>Central Policy Manager</h3>
+            <ul>
+              <li>Troubleshoot password rotation errors on Unix accounts</li>
+              <li>Troubleshoot rotation errors on Windows accounts</li>
+              <li>Write up fixes as troubleshooting docs</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">PSM</span>
+            <h3>Privileged Session Manager</h3>
+            <ul>
+              <li>Patch PSM servers</li>
+              <li>Renew PSM certificates</li>
+              <li>Help users connect to servers with domain and local admin accounts</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">PTA</span>
+            <h3>Privileged Threat Analytics</h3>
+            <ul>
+              <li>Renew PTA certificates</li>
+              <li>Document the renewal as a repeatable SOP</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">Auth</span>
+            <h3>SAML, LDAPS and PKI</h3>
+            <ul>
+              <li>Renew SAML certificates in production</li>
+              <li>Lab: replaced the self-signed LDAP certificate with a CA-signed one</li>
+              <li>Lab: set up two-factor authentication with PKI and LDAPS</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="signals">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="sec-tag">// signals</span>
-      <h2>Credentials &amp; proof</h2>
+  <section id="experience">
+    <div class="wrap sec">
+      <p class="label">02 / Experience</p>
+      <div>
+        <h2>Two years at Accenture, on both sides of access</h2>
+        <div class="job-head">
+          <h3>Accenture, Nagpur</h3>
+          <span class="when">March 2024 to present</span>
+        </div>
+        <div class="tracks">
+          <div class="track">
+            <h4>CyberArk PAM operations</h4>
+            <ul class="bullets">
+              <li><strong>L2 support</strong> for client CyberArk environments covering Vault, PVWA, CPM, PSM and PTA.</li>
+              <li>Patched PVWA and PSM and renewed certificates across PVWA, PSM, PTA and SAML.</li>
+              <li>Resolved CPM password rotation failures for Unix and Windows accounts.</li>
+              <li>Updated client <strong>runbooks</strong> and wrote <strong>SOPs</strong> for certificate renewal and troubleshooting.</li>
+              <li>Ran knowledge-transfer sessions for new team members.</li>
+            </ul>
+          </div>
+          <div class="track">
+            <h4>Backend engineering</h4>
+            <ul class="bullets">
+              <li>Built and maintained Java and Spring Boot microservices, contributing to <strong>3+ production services</strong>.</li>
+              <li>Designed Apache Kafka event pipelines that cut synchronous API bottlenecks by about <strong>35%</strong>.</li>
+              <li>Developed REST APIs with Spring MVC and MySQL, with JUnit and Mockito tests at <strong>80%+ coverage</strong>.</li>
+              <li>Reviewed peers' Java code for quality, security and standards.</li>
+              <li>Deployed to AWS (EC2, S3) and Linux through Git-based CI/CD under change management.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="creds reveal">
-      <div class="cred">
-        <div class="big">OCA</div>
-        <div class="lbl">Oracle Certified Associate — Java</div>
-      </div>
-      <div class="cred">
-        <div class="big">AWS</div>
-        <div class="lbl">Cloud certification — in progress</div>
-      </div>
-      <div class="cred">
-        <div class="big">9.31</div>
-        <div class="lbl">CGPA · B.E. Information Technology, Ramdeobaba University</div>
-      </div>
-      <div class="cred">
-        <div class="big">550+</div>
-        <div class="lbl">Problems solved on LeetCode</div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="contact" id="contact">
-  <div class="wrap reveal">
-    <div class="eyebrow">Access request open</div>
-    <h2>Let's talk privileged access.</h2>
-    <p style="color:var(--muted);max-width:520px;margin:0 auto 8px">Open to CyberArk / PAM and backend engineering roles. The quickest way to reach me is below.</p>
-    <div class="links">
-      <a class="btn primary" href="mailto:your.email@example.com">Email me</a>
-      <a class="btn ghost" href="https://www.linkedin.com/in/your-handle">LinkedIn</a>
-      <a class="btn ghost" href="https://github.com/your-handle">GitHub</a>
-      <a class="btn ghost" href="#" onclick="return false;">Download résumé</a>
+  <section id="projects">
+    <div class="wrap sec">
+      <p class="label">03 / Projects</p>
+      <div>
+        <h2>Privileged access tools I built myself</h2>
+        <p class="intro">Both projects take a core PAM idea and implement it end to end in Java.</p>
+        <div class="projects">
+          <article class="project">
+            <div class="project-head">
+              <h3>JIT Access Provider</h3>
+              <a href="https://github.com/Pranav1817/JIT-Access-Provider">View on GitHub</a>
+            </div>
+            <p class="what">Just-in-time SSH access to Linux servers. Users get a temporary OS account when they need one and lose it when the window closes, so no standing credentials are left behind.</p>
+            <ul class="bullets">
+              <li>Time-bound access reduces the attack surface by about <strong>90%</strong> compared with standing accounts.</li>
+              <li>Role-based access control with Spring Security across <strong>10+ secured endpoints</strong>.</li>
+              <li>Temporary users are provisioned and revoked over SSH (JSch) by a <strong>60-second</strong> scheduler.</li>
+              <li>A normalized MySQL schema keeps a full <strong>audit trail</strong> of every session: grant time, expiry and revocation status.</li>
+            </ul>
+            <ul class="chips" aria-label="Tools used">
+              <li>Java</li><li>Spring Boot</li><li>Spring Security</li><li>Spring Data JPA</li><li>Hibernate</li><li>MySQL</li><li>JSch</li><li>Maven</li>
+            </ul>
+          </article>
+
+          <article class="project">
+            <div class="project-head">
+              <h3>KeyMatrix</h3>
+              <a href="https://github.com/Pranav1817/KeyMatrix">View on GitHub</a>
+            </div>
+            <p class="what">A desktop credential vault in JavaFX. It stores 100+ credentials with nothing in plaintext at rest.</p>
+            <ul class="bullets">
+              <li><strong>AES-256</strong> encryption with <strong>PBKDF2</strong> key derivation.</li>
+              <li>Full credential lifecycle with search and filter, cutting average retrieval time by about <strong>40%</strong>.</li>
+              <li>Shipped as a Windows MSI installer with a bundled Java runtime.</li>
+            </ul>
+            <ul class="chips" aria-label="Tools used">
+              <li>Java</li><li>JavaFX</li><li>AES-256</li><li>PBKDF2</li><li>MSI</li>
+            </ul>
+          </article>
+
+          <article class="project">
+            <div class="project-head">
+              <h3>CyberArk PAM home lab</h3>
+            </div>
+            <p class="what">A working PAM environment with Vault (PrivateArk), PVWA and PSM that I use to practice changes before I meet them in production.</p>
+            <ul class="bullets">
+              <li>Swapped the self-signed LDAP certificate for a CA-signed certificate.</li>
+              <li>Configured two-factor authentication using PKI with LDAPS.</li>
+            </ul>
+            <ul class="chips" aria-label="Tools used">
+              <li>Vault</li><li>PVWA</li><li>PSM</li><li>LDAPS</li><li>PKI</li>
+            </ul>
+          </article>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section id="skills">
+    <div class="wrap sec">
+      <p class="label">04 / Skills</p>
+      <div>
+        <h2>Skills</h2>
+        <dl class="skills">
+          <div class="row"><dt>CyberArk PAM</dt><dd>Vault, PVWA, CPM, PSM, PTA, DR replication checks, patching, certificate renewal, SAML, LDAPS, PKI</dd></div>
+          <div class="row"><dt>Access and risk</dt><dd>Access management, RBAC, audit trails, IT general controls (ITGC), risk assessment</dd></div>
+          <div class="row"><dt>Programming</dt><dd>Java, Python, C++, SQL</dd></div>
+          <div class="row"><dt>Frameworks and tools</dt><dd>Spring Boot, Spring Security, Spring Data JPA, Git, CI/CD, Docker, AWS (EC2, S3)</dd></div>
+          <div class="row"><dt>Systems and messaging</dt><dd>Linux, Windows, Apache Kafka</dd></div>
+          <div class="row"><dt>Databases</dt><dd>Oracle SQL, MySQL, PostgreSQL, MongoDB</dd></div>
+          <div class="row"><dt>Documentation</dt><dd>Runbooks, SOPs, troubleshooting guides, knowledge-transfer sessions</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="credentials">
+    <div class="wrap sec">
+      <p class="label">05 / Credentials</p>
+      <div>
+        <h2>Certifications and education</h2>
+        <div class="creds">
+          <div>
+            <h3>Certifications</h3>
+            <ul>
+              <li>CyberArk Defender</li>
+              <li>CyberArk Sentry</li>
+              <li>Oracle Certified Java Associate (OCA)</li>
+              <li>Oracle AI Foundation</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Education</h3>
+            <ul>
+              <li>B.E. Information Technology<span>Ramdeobaba University, 2020 to 2024</span></li>
+              <li class="num">CGPA 9.31 / 10<span>Merit scholarship of INR 10,000</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Problem solving</h3>
+            <ul>
+              <li class="num">3rd of 300<span>Coding contest, Technical Club, RCOEM</span></li>
+              <li class="num">1,750+ problems<span><a href="https://www.naukri.com/code360/profile/pranav_1817">Code360 profile</a></span></li>
+              <li class="num">550+ problems<span><a href="https://leetcode.com/u/pranav_1817/">LeetCode profile</a></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap sec">
+      <p class="label">06 / Contact</p>
+      <div>
+        <h2>Contact</h2>
+        <p class="intro">The fastest way to reach me is email.</p>
+        <ul class="contact-list">
+          <li><span class="k">Email</span><a href="mailto:pranavkumbhalkar5@gmail.com">pranavkumbhalkar5@gmail.com</a></li>
+          <li><span class="k">LinkedIn</span><a href="https://linkedin.com/in/pranav-kumbhalkar-aa771922b">linkedin.com/in/pranav-kumbhalkar</a></li>
+          <li><span class="k">GitHub</span><a href="https://github.com/Pranav1817">github.com/Pranav1817</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
 
 <footer>
-  <div class="foot-inner">
-    <span>◈ pranav@vault · Privileged Access Management</span>
-    <span>Built as a static page · deploy anywhere</span>
-  </div>
+  <div class="wrap">Pranav Kumbhalkar · Nagpur, India</div>
 </footer>
 
-<script>
-  (function(){
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document.body.classList.add('js');
-    if(reduce) return;
-    if('IntersectionObserver' in window){
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-        });
-      }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
-      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
-    } else {
-      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
-    }
-  })();
-</script>
 </body>
 </html>
