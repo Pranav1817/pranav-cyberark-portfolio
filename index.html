@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pranav Kumbhalkar Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a left-aligned record sheet. Mono field labels in a narrow left rail,
+   content on the right, like reading an account record in a vault. */
+:root {
+  --paper: #eef1f6;
+  --surface: #ffffff;
+  --ink: #131c2e;
+  --muted: #56617a;
+  --line: #cfd6e3;
+  --accent: #1f4fd8;
+  --accent-soft: #dfe7fb;
+  --signal: #b4610a;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1524;
+    --surface: #162033;
+    --ink: #e8edf7;
+    --muted: #9aa6bf;
+    --line: #2a364e;
+    --accent: #8fb0ff;
+    --accent-soft: #1d2c4d;
+    --signal: #f0a94a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1524;
+  --surface: #162033;
+  --ink: #e8edf7;
+  --muted: #9aa6bf;
+  --line: #2a364e;
+  --accent: #8fb0ff;
+  --accent-soft: #1d2c4d;
+  --signal: #f0a94a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.1; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* Top bar */
+.top {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; padding-top: 12px; padding-bottom: 12px; }
+.mark { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 500; color: var(--ink); text-decoration: none; }
+.mark span { color: var(--signal); }
+.top nav { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.top nav a { font-size: 0.875rem; color: var(--muted); text-decoration: none; }
+.top nav a:hover { color: var(--accent); }
+
+/* Hero */
+.hero { padding: 64px 0 56px; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--signal); letter-spacing: 0.04em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(2.5rem, 6vw, 4.25rem); font-weight: 700; letter-spacing: -0.02em; margin-top: 12px; }
+.hero .lede { font-size: 1.1875rem; color: var(--muted); max-width: 34em; margin-top: 20px; }
+.hero .lede strong { color: var(--ink); font-weight: 500; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn {
+  display: inline-block; padding: 10px 18px; border-radius: 6px;
+  font-weight: 500; font-size: 0.9375rem; text-decoration: none;
+  border: 1px solid var(--line); color: var(--ink); background: var(--surface);
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.btn.primary:hover { color: var(--paper); opacity: 0.9; }
+
+.record {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  overflow: hidden;
+}
+.record header {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 10px 16px; border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);
+}
+.pill { font-family: var(--font-mono); font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.record .photo { display: block; width: 100%; height: auto; max-width: 100%; border-bottom: 1px solid var(--line); }
+.record dl { margin: 0; }
+.record .row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+.record .row:last-child { border-bottom: 0; }
+.record dt { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); padding-top: 3px; }
+.record dd { margin: 0; font-size: 0.9375rem; }
+
+/* Sections */
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+.sec { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 32px 48px; }
+.sec > .label { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); padding-top: 8px; }
+.sec h2 { font-size: clamp(1.625rem, 3.2vw, 2.125rem); font-weight: 700; letter-spacing: -0.01em; }
+.sec .intro { color: var(--muted); max-width: 40em; margin-top: 12px; }
+
+/* PAM component grid */
+.stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 28px; }
+.comp { background: var(--surface); padding: 20px; }
+.comp .tag { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; color: var(--accent); }
+.comp h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; margin-top: 4px; line-height: 1.35; }
+.comp ul { margin-top: 10px; display: grid; gap: 6px; }
+.comp li, .bullets li { position: relative; padding-left: 16px; font-size: 0.9375rem; color: var(--muted); }
+.comp li::before, .bullets li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 1px; background: var(--signal); }
+
+/* Experience */
+.job-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 24px; align-items: baseline; margin-top: 28px; }
+.job-head h3 { font-size: 1.25rem; font-weight: 700; }
+.job-head .when { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tracks { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin-top: 20px; }
+.track h4 { margin: 0 0 10px; font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; color: var(--signal); text-transform: uppercase; letter-spacing: 0.04em; }
+.bullets { display: grid; gap: 8px; }
+.bullets strong { color: var(--ink); font-weight: 500; }
+
+/* Projects */
+.projects { display: grid; gap: 20px; margin-top: 28px; }
+.project { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+.project-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px; }
+.project h3 { font-size: 1.25rem; font-weight: 700; }
+.project .what { margin-top: 8px; max-width: 44em; }
+.project .bullets { margin-top: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.chips li { font-family: var(--font-mono); font-size: 0.75rem; padding: 3px 8px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); }
+
+/* Skills */
+.skills { margin-top: 24px; border-top: 1px solid var(--line); }
+.skills .row { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 24px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.skills dt { font-weight: 500; font-size: 0.9375rem; }
+.skills dd { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+dl { margin: 0; }
+
+/* Credentials */
+.creds { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; margin-top: 24px; }
+.creds h3 { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; color: var(--signal); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+.creds li { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 0.9375rem; }
+.creds li span { display: block; color: var(--muted); font-size: 0.875rem; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Contact */
+.contact-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 24px; }
+.contact-list li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.contact-list .k { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 4px; }
+.contact-list a { overflow-wrap: anywhere; font-size: 0.9375rem; }
+
+footer { border-top: 1px solid var(--line); padding: 24px 0 40px; color: var(--muted); font-size: 0.8125rem; font-family: var(--font-mono); }
+
+@media (max-width: 800px) {
+  .hero { padding: 40px 0; }
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .sec { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .sec > .label { padding-top: 0; }
+  section { padding: 40px 0; }
+  .skills .row { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">pranav<span>.</span>kumbhalkar</a>
+    <nav aria-label="Sections">
+      <a href="#pam">PAM stack</a>
+      <a href="#experience">Experience</a>
+      <a href="#builds">Builds</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</div>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">CyberArk Engineer · Privileged Access Management</p>
+        <h1>Pranav Kumbhalkar</h1>
+        <p class="lede">I administer and support enterprise <strong>CyberArk PAM</strong> environments at Accenture: Vault, CPM, PVWA, PSM and PTA. My work covers <strong>L2 support</strong>, account onboarding, password rotation, patching and audit support, and I build <strong>custom PSM connectors and CPM plugins</strong> for applications CyberArk does not cover out of the box.</p>
+        <div class="actions">
+          <a class="btn primary" href="#contact">Get in touch</a>
+          <a class="btn" href="https://linkedin.com/in/pranav-kumbhalkar-aa771922b">LinkedIn</a>
+          <a class="btn" href="https://github.com/Pranav1817">GitHub</a>
+        </div>
+      </div>
+
+      <aside class="record" aria-label="Profile summary">
+        <img class="photo" src="photo.jpg" alt="Pranav Kumbhalkar" width="1000" height="711">
+        <header><span>Account details</span><span class="pill">Defender · Sentry</span></header>
+        <dl>
+          <div class="row"><dt>Role</dt><dd>Security Managed Services Analyst</dd></div>
+          <div class="row"><dt>Employer</dt><dd>Accenture, Pune, India</dd></div>
+          <div class="row"><dt>Experience</dt><dd>2+ years in CyberArk PAM, L2 support</dd></div>
+          <div class="row"><dt>Uptime</dt><dd><span class="num">99.9%+</span> across production environments</dd></div>
+          <div class="row"><dt>Location</dt><dd>Maharashtra, India. Willing to relocate.</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+
+  <section id="pam">
+    <div class="wrap sec">
+      <p class="label">01 / PAM stack</p>
+      <div>
+        <h2>What I do on each CyberArk component</h2>
+        <p class="intro">Day-to-day administration and L2 support across highly available production environments, on Windows and Unix/Linux.</p>
+        <div class="stack">
+          <div class="comp">
+            <span class="tag">Vault</span>
+            <h3>Digital Vault and DR</h3>
+            <ul>
+              <li>Manage Safes, user roles, RBAC and dual control through PVWA and the PrivateArk Client</li>
+              <li>Review ITALog and resolve Vault connectivity problems</li>
+              <li>Log in to the DR Vault to verify Primary-to-DR replication</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">CPM</span>
+            <h3>Central Policy Manager</h3>
+            <ul>
+              <li>Manage platforms and CPM policies</li>
+              <li>Resolve rotation and reconciliation failures for Windows and Unix/Linux accounts</li>
+              <li>Fix CPM dependency issues</li>
+              <li>Develop custom CPM plugins for web applications</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">PVWA</span>
+            <h3>Password Vault Web Access</h3>
+            <ul>
+              <li>Onboard and offboard privileged accounts</li>
+              <li>Support password checkouts and login issues</li>
+              <li>Patch, upgrade and renew SSL certificates</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">PSM</span>
+            <h3>Privileged Session Manager</h3>
+            <ul>
+              <li>Troubleshoot session launch failures</li>
+              <li>Patch, upgrade and renew SSL certificates</li>
+              <li>Develop custom PSM connectors for isolated web application sessions</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">PTA</span>
+            <h3>Privileged Threat Analytics</h3>
+            <ul>
+              <li>Renew PTA SSL certificates</li>
+              <li>Document the renewal as a repeatable SOP</li>
+            </ul>
+          </div>
+          <div class="comp">
+            <span class="tag">Auth</span>
+            <h3>Authentication and integrations</h3>
+            <ul>
+              <li>Resolve LDAP, Active Directory and SAML authentication issues</li>
+              <li>Renew SAML certificates</li>
+              <li>Set up SMTP integration</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap sec">
+      <p class="label">02 / Experience</p>
+      <div>
+        <h2>Running CyberArk in production at Accenture</h2>
+        <div class="job-head">
+          <h3>Security Managed Services Analyst, Accenture, Pune</h3>
+          <span class="when">Aug 2024 to present</span>
+        </div>
+        <div class="tracks">
+          <div class="track">
+            <h4>Administration and onboarding</h4>
+            <ul class="bullets">
+              <li>Administer enterprise-scale CyberArk PAM infrastructure with <strong>99.9%+ uptime</strong>, enforcing least privilege through Safes, platforms, CPM policies, RBAC and dual control.</li>
+              <li>Onboard servers, databases, applications and service accounts with infrastructure, IAM and cybersecurity teams.</li>
+              <li>Own the <strong>account lifecycle</strong>: onboarding, offboarding, password rotation and reconciliation.</li>
+            </ul>
+          </div>
+          <div class="track">
+            <h4>L2 support</h4>
+            <ul class="bullets">
+              <li>Handle password checkouts, PSM session launch failures, authentication mismatches and server login issues.</li>
+              <li>Meet SLAs for <strong>P2 to P4 tickets</strong> in ServiceNow.</li>
+              <li>Find root causes for CPM, Vault connectivity, LDAP, Active Directory and SAML problems.</li>
+              <li>Received <strong>client appreciation</strong> for rapid resolution of a critical production issue.</li>
+            </ul>
+          </div>
+          <div class="track">
+            <h4>Maintenance and health</h4>
+            <ul class="bullets">
+              <li>Carry out PVWA and PSM patching, upgrades and certificate renewals with <strong>zero unplanned downtime</strong>.</li>
+              <li>Monitor platform health through Vault ITALog, CPM, PVWA, PSM and AD logs.</li>
+              <li>Verify Primary-to-DR replication for disaster recovery readiness.</li>
+            </ul>
+          </div>
+          <div class="track">
+            <h4>Audit and documentation</h4>
+            <ul class="bullets">
+              <li>Support internal and external <strong>audits</strong> with privileged account inventory, password compliance and access governance reports.</li>
+              <li>Perform user access reviews.</li>
+              <li>Write SOPs for certificate renewal and troubleshooting, and keep client runbooks, incident and change records current.</li>
+              <li>Deliver KT sessions to new team members and guide users on PVWA login and PSM connections.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="builds">
+    <div class="wrap sec">
+      <p class="label">03 / Builds</p>
+      <div>
+        <h2>Connectors, a lab and two access tools</h2>
+        <p class="intro">Work that goes past administration: extending CyberArk, and implementing PAM ideas from scratch in Java.</p>
+        <div class="projects">
+          <article class="project">
+            <div class="project-head">
+              <h3>Custom PSM connectors and CPM plugins</h3>
+              <span class="pill">At Accenture</span>
+            </div>
+            <p class="what">Web applications that CyberArk's out-of-the-box connectors do not cover still need isolated sessions and managed credentials. I develop the connectors and plugins that bring them under PAM.</p>
+            <ul class="bullets">
+              <li>PSM connectors launch isolated sessions to the application.</li>
+              <li>CPM plugins automate credential management for the same accounts.</li>
+            </ul>
+          </article>
+
+          <article class="project">
+            <div class="project-head">
+              <h3>CyberArk PAM personal lab</h3>
+              <span class="pill">Personal</span>
+            </div>
+            <p class="what">A lab with Vault, PVWA and PSM where I try new CyberArk features and practice changes before meeting them in production.</p>
+            <ul class="bullets">
+              <li>Configured LDAPS with a CA-signed certificate.</li>
+              <li>Implemented two-factor authentication using PKI and LDAPS.</li>
+            </ul>
+          </article>
+
+          <article class="project">
+            <div class="project-head">
+              <h3>JIT Access Provider</h3>
+              <a href="https://github.com/Pranav1817/JIT-Access-Provider">View on GitHub</a>
+            </div>
+            <p class="what">Just-in-time SSH access to Linux servers. Users get a temporary OS account when they need one and lose it when the window closes, so no standing credentials are left behind.</p>
+            <ul class="bullets">
+              <li>Role-based access control with Spring Security across <strong>10+ secured endpoints</strong>.</li>
+              <li>Temporary users are provisioned and revoked over SSH by a <strong>60-second</strong> scheduler.</li>
+              <li>A MySQL <strong>audit trail</strong> records every session: grant time, expiry and revocation status.</li>
+            </ul>
+            <ul class="chips" aria-label="Tools used">
+              <li>Java</li><li>Spring Boot</li><li>Spring Security</li><li>MySQL</li><li>JSch</li>
+            </ul>
+          </article>
+
+          <article class="project">
+            <div class="project-head">
+              <h3>KeyMatrix</h3>
+              <a href="https://github.com/Pranav1817/KeyMatrix">View on GitHub</a>
+            </div>
+            <p class="what">A desktop credential vault in JavaFX with nothing stored in plaintext at rest.</p>
+            <ul class="bullets">
+              <li><strong>AES-256</strong> encryption with <strong>PBKDF2</strong> key derivation.</li>
+              <li>Full credential lifecycle with search and filter.</li>
+              <li>Shipped as a Windows MSI installer with a bundled Java runtime.</li>
+            </ul>
+            <ul class="chips" aria-label="Tools used">
+              <li>Java</li><li>JavaFX</li><li>AES-256</li><li>PBKDF2</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap sec">
+      <p class="label">04 / Skills</p>
+      <div>
+        <h2>Skills</h2>
+        <dl class="skills">
+          <div class="row"><dt>CyberArk</dt><dd>Vault, CPM, PVWA, PSM, PTA, PrivateArk Client, Safe and platform management, CPM policies, password rotation and reconciliation, session management, DR replication, custom PSM/CPM connectors</dd></div>
+          <div class="row"><dt>PAM and IAM</dt><dd>Least privilege, RBAC, dual control, access reviews, audit and compliance reporting</dd></div>
+          <div class="row"><dt>Systems and authentication</dt><dd>Windows, Unix/Linux, Active Directory, LDAP/LDAPS, SAML, PKI, SSL/TLS certificates, SMTP</dd></div>
+          <div class="row"><dt>ITSM tools</dt><dd>ServiceNow, CA Service Manager, Silva</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="credentials">
+    <div class="wrap sec">
+      <p class="label">05 / Credentials</p>
+      <div>
+        <h2>Certifications and education</h2>
+        <div class="creds">
+          <div>
+            <h3>Certifications</h3>
+            <ul>
+              <li>CyberArk Certified Defender, PAM</li>
+              <li>CyberArk Certified Sentry, PAM</li>
+              <li>Oracle Certified Java Associate</li>
+              <li>Claude Certified Associate, Foundation</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Education</h3>
+            <ul>
+              <li>B.Tech in Information Technology<span>Ramdeobaba University, Nagpur, 2020 to 2024</span></li>
+              <li class="num">CGPA 9.31 / 10<span>Scholarship of INR 10,000 for academic excellence</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap sec">
+      <p class="label">06 / Contact</p>
+      <div>
+        <h2>Contact</h2>
+        <p class="intro">Based in Maharashtra, India, and willing to relocate. The fastest way to reach me is email.</p>
+        <ul class="contact-list">
+          <li><span class="k">Email</span><a href="mailto:pranavkumbhalkar5@gmail.com">pranavkumbhalkar5@gmail.com</a></li>
+          <li><span class="k">LinkedIn</span><a href="https://linkedin.com/in/pranav-kumbhalkar-aa771922b">linkedin.com/in/pranav-kumbhalkar-aa771922b</a></li>
+          <li><span class="k">GitHub</span><a href="https://github.com/Pranav1817">github.com/Pranav1817</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Pranav Kumbhalkar · CyberArk Engineer · Maharashtra, India</div>
+</footer>
+
+</body>
+</html>
